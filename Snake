@@ -1,0 +1,519 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<Windows.h>
+#include<conio.h>
+#include<time.h>
+
+#define left_movement 54
+#define up_movement 56   
+#define down_movement 53
+#define right_movement 52
+
+
+void game_menu();
+
+void movement_to_the_left_function();
+
+void movement_to_the_right_function();
+
+void movement_to_the_up_function();
+
+void movement_to_the_down_function();
+
+void checking_for_movement_changes();
+
+int random_generation_line();
+
+int random_generation_coloana();
+
+void points();
+
+int  time_function();
+
+void print_border();
+
+void snake_body();
+
+bool game_over_function();
+
+int difficulty_function();
+
+bool ending_the_game();
+
+
+
+char g_table[20][30] = 
+ {
+	 {'_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','|'},
+     {'|','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','_','|'}
+ };
+
+    int last_move = right_movement;
+
+    int number_of_cells = 3;
+
+    int hed_row = 10; 
+
+    int hed_column = 4;
+
+    int g_min = 0;
+
+    int g_sec = 00;
+
+    int g_score = 0;
+   
+
+
+int main()
+{
+    bool game_over = false;
+
+    int delete_row = 10;
+
+    int delete_column = 1;
+    
+    srand(time(NULL));
+
+    game_menu();
+
+    do
+    { 
+       if ( 0 != kbhit())
+       {
+
+            switch(getch())
+               {
+                  case 54:
+
+                        last_move = right_movement;
+
+                        break;
+
+                  case 52:
+        
+                        last_move = left_movement;
+
+                        break;
+
+                  case 56:
+        
+                        last_move = up_movement;
+
+                        break; 
+
+                  case 53:
+
+                        last_move = down_movement;
+
+                        break;             
+
+               }
+      }
+
+    snake_body();
+
+    points();
+
+    print_border();
+
+    time_function();
+
+    game_over = game_over_function();
+
+    checking_for_movement_changes();
+
+	}while(!game_over);
+
+    printf("\r\n                       GAME OVER");
+
+	return 0;
+
+}
+
+void game_menu()
+{
+
+int up = 24;
+
+    int right = 26;
+
+    int left = 27;
+
+    int down = 25;
+
+    int esc;
+
+    system("cls");
+
+    printf("\r\n                              Welcome to Snake 1.0   ");
+
+    Sleep(200);
+
+    printf("\r\n\r\n                              Motion Up %c  = 8",up);
+    printf("\r\n\r\n                   Motion Left %c = 4  Motion Right %c = 6 ", left, right  );
+    printf("\r\n\r\n                            Motion Down %c = 5  ",down);
+    printf("\r\n\r\n                        Pentru a incepe jocul apasa o tasta     ");
+    getch();
+
+    Sleep(200);
+
+}
+
+void print_border()
+{
+    system("cls");
+
+               
+            printf("\n\n\n               TIME %d:%d             SCORE %d\n",g_min,g_sec,g_score) ;   
+
+   for(int r = 0; r< 20; r++)
+    {
+           
+            printf("               %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+            g_table[r][0], g_table[r][1], g_table[r][2], g_table[r][3],g_table[r][4], 
+            g_table[r][5], g_table[r][6], g_table[r][7], g_table[r][8],g_table[r][9],
+            g_table[r][10], g_table[r][11], g_table[r][12], g_table[r][13], g_table[r][14],
+            g_table[r][15], g_table[r][16], g_table[r][17], g_table[r][18], g_table[r][19],
+            g_table[r][20], g_table[r][21], g_table[r][22], g_table[r][23],g_table[r][24], 
+            g_table[r][25], g_table[r][26], g_table[r][27], g_table[r][28],g_table[r][29]);
+              
+    } 
+}
+
+   void snake_body( )
+{
+   
+    static int delete_row_1[28] ={ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+                                  10 ,10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+
+    static int delete_row_2[28] ={ 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+                                  10 ,10, 10,10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10};
+
+    static int delete_column_1[28] = {28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15,
+                                        14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
+    static int delete_column_2[28] = {28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15,
+                                        14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1};
+
+    
+
+    int b = 1;
+
+
+  
+     
+    
+
+    g_table[hed_row][hed_column] = 2;
+
+    delete_row_1[0] = hed_row;
+
+    delete_column_1[0] = hed_column;
+
+    
+     for( int z = 0; z < number_of_cells; z++)
+        {
+            delete_row_1[b] = delete_row_2[z];
+
+            delete_row_2[z] = delete_row_1[z];
+
+            delete_column_1[b] = delete_column_2[z];
+
+            delete_column_2[z] = delete_column_1[z];
+        
+            b++;
+        }
+    int r = delete_row_1[number_of_cells];
+
+    int c = delete_column_1[number_of_cells];
+
+    g_table[r][c] = ' ';
+
+}
+
+void checking_for_movement_changes()
+{ 
+    switch(last_move)
+    {
+        case right_movement:
+
+            movement_to_the_right_function( );
+
+            break;
+
+        case left_movement:
+        
+            movement_to_the_left_function( );
+
+            break;
+
+        case up_movement:
+        
+            movement_to_the_up_function( ); 
+
+            break;
+
+        case down_movement:
+
+            movement_to_the_down_function(); 
+
+            break;  
+    }
+
+}
+
+void movement_to_the_right_function()
+{
+    hed_column++;
+}
+
+void movement_to_the_left_function()
+{
+    hed_column--;
+}
+
+void movement_to_the_up_function()
+{
+    hed_row--;
+}
+
+void movement_to_the_down_function()
+{
+    hed_row++;
+}
+
+bool game_over_function()
+{   
+   bool result = false;
+
+
+   result = ending_the_game();  
+     
+    for ( int a = 0; a < 20; a++)
+        if(g_table[hed_row][hed_column] == g_table[a][0])
+            {
+                result = true;
+            }
+
+    for ( int a = 0; a < 20; a++)
+        if(g_table[hed_row][hed_column] == g_table[a][29])
+            {
+                result = true;
+            } 
+
+    for ( int a = 0; a < 30; a++)
+        if(g_table[hed_row][hed_column] == g_table[0][a])
+            {
+                result = true;
+            }
+
+    for ( int a = 0; a < 20; a++)
+        if(g_table[hed_row][hed_column] == g_table[19][a])
+            {
+                result = true;
+            }
+
+                        
+
+   return result;
+}
+
+bool ending_the_game()
+{
+    bool result = false;
+
+    if ( number_of_cells == 29)
+            {
+                result = true;
+
+                printf("                 You won with the score of : %d", g_score);
+            }
+
+    return result;
+}
+
+ void points()
+{
+
+    static int least_time = 0;
+
+    static int row = 15;
+
+    static int column = 20;
+
+    bool result = true;
+
+    if(g_sec == 0)
+
+    least_time = 0;
+
+
+    if( g_sec - least_time == 5 )
+        {
+            g_table[row][column] = ' ';
+
+            row = random_generation_line();
+
+            column = random_generation_coloana();
+
+            g_table[row][column] = 3;
+
+            least_time = g_sec;             
+        }
+
+    if ( hed_row == row && hed_column == column)
+        {
+            number_of_cells++;
+
+            g_score = g_score + 10;
+
+            g_table[row][column] = 1;
+         
+        }
+
+}
+
+    int random_generation_line()
+  {
+
+    int row = 10;
+
+    int a;
+
+    a = rand() % 18; /// limita pana unde se vor crea numere randam
+
+    if(a > 1)
+    {
+        row = a;
+    }
+    
+    return row;
+    
+}
+
+   int random_generation_coloana()
+  {
+    int a; 
+
+    int column = 20;
+
+    column = rand() % 28; /// limita pana unde se vor crea numere randam
+
+    if(a > 1 )
+    {
+        column = a;
+    }
+
+    return column;
+
+    }
+
+  int  time_function()
+  {
+    
+
+    int difficulty;
+
+    static int time = 200;
+
+    static int contuar = 0;
+
+    Sleep(time);
+
+
+    time = difficulty_function();
+
+
+     switch (time)
+     {
+       
+
+        case 200:       
+            contuar++;
+                if(contuar  > 4)
+                {
+                    g_sec++;
+
+                    contuar = 0;
+
+                }
+            break;
+        case 150:       
+            contuar++;
+                if(contuar  == 7)
+                {
+                    g_sec++;
+
+                    contuar = 0;
+
+                }
+            break; 
+
+
+        case 100:       
+            contuar++;
+                if(contuar  == 10)
+                {
+                    g_sec++;
+
+                    contuar = 0;
+
+                }
+            break; 
+
+        case 50:       
+            contuar++;
+                if(contuar  == 12)
+                {
+                    g_sec++;
+
+                    contuar = 0;
+
+                }
+            break;  
+
+       }
+}
+
+    int difficulty_function()
+{
+    static int difficulty = 0;
+
+    static int time = 200;
+
+    if(g_sec == 30 && time != 50 )
+        {
+            time = time - 50;
+
+            g_sec++;
+        }
+             
+    if( g_sec == 60 )
+        {
+            g_min++; 
+
+            g_sec = 00;             
+        }
+      
+
+        return time;
+    }
